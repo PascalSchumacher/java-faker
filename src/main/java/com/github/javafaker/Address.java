@@ -5,33 +5,33 @@ import com.github.javafaker.service.RandomService;
 
 public class Address {
 
+    private final Resolver resolver;
     private final Name name;
     private final FakeValuesService fakeValuesService;
     private final RandomService randomService;
 
-    public Address(Name name, FakeValuesService fakeValuesService, RandomService randomService) {
+    public Address(Resolver resolver, Name name, FakeValuesService fakeValuesService, RandomService randomService) {
+        this.resolver = resolver;
         this.name = name;
         this.fakeValuesService = fakeValuesService;
         this.randomService = randomService;
     }
 
     public String streetName() {
-        return fakeValuesService.composite("address.street_name_formats",
-                (String) fakeValuesService.fetchObject("address.street_name_joiner"),
-                this);
+        return resolve("address.street_name");
     }
 
     public String streetAddressNumber() {
-        return fakeValuesService.numerify(fakeValuesService.fetchString("address.street_address"));
+        return resolve("address.street_address");
     }
 
-    public String streetAddress(boolean includeSecondary) {
-        String streetAddress = fakeValuesService.composite("address.street_formats", " ", this);
-        if (includeSecondary) {
-            streetAddress = streetAddress + " " + secondaryAddress();
-        }
-        return fakeValuesService.numerify(streetAddress);
+    public String streetAddress() {
+        return resolve("address.street_address");
     }
+
+    // TODO deleted this method
+//    public String streetAddress(boolean includeSecondary) {
+
 
     public String secondaryAddress() {
         return fakeValuesService.numerify(fakeValuesService.fetchString("address.secondary_address"));
@@ -54,9 +54,7 @@ public class Address {
     }
 
     public String city() {
-        return fakeValuesService.composite("address.city",
-                "",
-                this);
+        return resolve("address.city");
     }
 
     public String state() {
@@ -89,5 +87,13 @@ public class Address {
 
     public String timeZone() {
         return fakeValuesService.fetchString("address.time_zone");
+    }
+
+    public String buildingNumber() {
+        return fakeValuesService.numerify(fakeValuesService.fetchString("address.building_number"));
+    }
+
+    private String resolve(String key) {
+        return fakeValuesService.resolve(key, this, resolver);
     }
 }

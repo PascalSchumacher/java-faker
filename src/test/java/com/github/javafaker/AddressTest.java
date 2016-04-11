@@ -26,7 +26,7 @@ public class AddressTest {
     public void testStreetAddressIsANumber() {
         final String streetAddressNumber = faker.address().streetAddressNumber();
         logger.info("Street Address Number: " + streetAddressNumber);
-        assertThat(streetAddressNumber, isANumber());
+        assertThat(streetAddressNumber, matchesRegularExpression("[0-9]+ [A-Za-z0-9 ]+"));
     }
 
     @Test

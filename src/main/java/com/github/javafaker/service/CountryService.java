@@ -3,16 +3,19 @@ package com.github.javafaker.service;
 import com.github.javafaker.Country;
 import java.util.List;
 
+// TODO fix up
 public class CountryService {
 
     private final RandomService randomService;
-    private final List<String> isoCodes;
-    private final List<String> names;
+//    private final List<String> isoCodes;
+    private List<String> isoCodes;
+//    private final List<String> names;
+    private List<String> names;
 
     public CountryService(FakeValuesService fakeValuesService, RandomService randomService) {
         this.randomService = randomService;
-        isoCodes = (List<String>) fakeValuesService.fetchObject("country.iso");
-        names = (List<String>) fakeValuesService.fetchObject("country.name");
+//        isoCodes = (List<String>) fakeValuesService.fetchObject("country.iso");
+//        names = (List<String>) fakeValuesService.fetchObject("country.name");
     }
     
     public Country country() {

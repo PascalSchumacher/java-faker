@@ -1,5 +1,6 @@
 package com.github.javafaker.service;
 
+import com.github.javafaker.Resolver;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -8,6 +9,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FakeValuesService {
     private static final char[] METHOD_NAME_DELIMITERS = {'_'};
@@ -167,4 +170,21 @@ public class FakeValuesService {
     private int nextInt(int n) {
         return randomService.nextInt(n);
     }
+
+
+    public String resolve(String key, Object current, Resolver resolver) {
+        String unresolvedString = fetchString(key);
+        String regex = "#\\{[A-Za-z_.]+\\}";
+        Matcher matcher = Pattern.compile(regex).matcher(unresolvedString);
+        while (matcher.find()) {
+            String matched = matcher.group();
+            String strippedMatched = matched.replace('#', ' ').replace('{', ' ').replace('}', ' ').trim();
+            boolean isFirstLetterCapital = Character.isUpperCase(strippedMatched.charAt(0));
+            String objectWithMethodToResolve = isFirstLetterCapital ? strippedMatched : current.getClass().getSimpleName() + "." + strippedMatched;
+            String resolvedObjectMethod = resolver.resolve(objectWithMethodToResolve);
+            unresolvedString = unresolvedString.replace(matched, resolvedObjectMethod);
+        }
+        return unresolvedString;
+    }
+
 }

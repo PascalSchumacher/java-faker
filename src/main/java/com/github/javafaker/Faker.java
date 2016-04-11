@@ -3,6 +3,8 @@ package com.github.javafaker;
 import com.github.javafaker.service.CountryService;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.reflect.MethodUtils;
 
 import java.util.Locale;
 import java.util.Random;
@@ -13,7 +15,7 @@ import java.util.Random;
  *
  * @author ren
  */
-public class Faker {
+public class Faker implements Resolver {
     private final RandomService randomService;
     private final FakeValuesService fakeValuesService;
     private final Lorem lorem;
@@ -48,7 +50,7 @@ public class Faker {
         this.name = new Name(fakeValuesService);
         this.internet = new Internet(name, fakeValuesService, randomService);
         this.phoneNumber = new PhoneNumber(fakeValuesService);
-        this.address = new Address(name, fakeValuesService, randomService);
+        this.address = new Address(this, name, fakeValuesService, randomService);
         this.business = new Business(fakeValuesService);
         this.company = new Company(fakeValuesService);
         this.options = new Options(randomService);
@@ -140,4 +142,27 @@ public class Faker {
         return dateAndTime;
     }
 
+    /**
+     * Resolves a key in the format of class.method_name
+     *
+     * @param key
+     * @return
+     */
+    public String resolve(String key) {
+        String[] keySplit = key.split("\\.", 2);
+        String object = keySplit[0].toLowerCase();
+        String methodName = keySplit[1];
+
+        char[] METHOD_NAME_REPLACEMENT = {'_'};
+        methodName = WordUtils.capitalizeFully(methodName, METHOD_NAME_REPLACEMENT).replaceAll("_", "");
+        methodName = methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
+        try {
+            Object objectWithMethodToInvoke = MethodUtils.invokeMethod(this, object, null);
+            String value = (String) MethodUtils.invokeMethod(objectWithMethodToInvoke, methodName, null);
+            System.out.println("resolving " + key + " to " + value);
+            return value;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

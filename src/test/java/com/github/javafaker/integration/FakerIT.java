@@ -102,7 +102,7 @@ public class FakerIT {
         assertThat(faker.lorem().sentence(1), is(notNullValue()));
         assertThat(faker.lorem().sentences(1), is(notNullValue()));
 
-        assertThat(faker.address().streetAddress(true), is(notNullValue()));
+        assertThat(faker.address().streetAddress(), is(notNullValue()));
 
         assertThat(faker.lorem().words(), is(notNullValue()));
         assertThat(faker.lorem().words(1), is(notNullValue()));
