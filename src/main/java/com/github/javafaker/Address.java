@@ -1,16 +1,16 @@
 package com.github.javafaker;
 
-import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.FakeValuesServiceInterface;
 import com.github.javafaker.service.RandomService;
 
 public class Address {
 
     private final Resolver resolver;
     private final Name name;
-    private final FakeValuesService fakeValuesService;
+    private final FakeValuesServiceInterface fakeValuesService;
     private final RandomService randomService;
 
-    public Address(Resolver resolver, Name name, FakeValuesService fakeValuesService, RandomService randomService) {
+    public Address(Resolver resolver, Name name, FakeValuesServiceInterface fakeValuesService, RandomService randomService) {
         this.resolver = resolver;
         this.name = name;
         this.fakeValuesService = fakeValuesService;
@@ -29,6 +29,11 @@ public class Address {
         return resolve("address.street_address");
     }
 
+    // TODO delete
+//    public String streetPrefix() {
+//        return resolve("address.street_prefix");
+//    }
+
     // TODO deleted this method
 //    public String streetAddress(boolean includeSecondary) {
 
@@ -46,15 +51,19 @@ public class Address {
     }
 
     public String citySuffix() {
-        return fakeValuesService.fetchString("address.city_suffix");
+        return fakeValuesService.safeFetch("address.city_suffix");
     }
 
     public String cityPrefix() {
-        return fakeValuesService.fetchString("address.city_prefix");
+        return fakeValuesService.safeFetch("address.city_prefix");
     }
 
     public String city() {
         return resolve("address.city");
+    }
+
+    public String cityName() {
+        return city();
     }
 
     public String state() {
@@ -63,10 +72,6 @@ public class Address {
 
     public String stateAbbr() {
         return fakeValuesService.fetchString("address.state_abbr");
-    }
-
-    public String country() {
-        return fakeValuesService.fetchString("address.country");
     }
 
     public String firstName() {
@@ -88,6 +93,10 @@ public class Address {
     public String timeZone() {
         return fakeValuesService.fetchString("address.time_zone");
     }
+
+    public String country() { return fakeValuesService.fetchString("address.country"); }
+
+    public String countryCode() { return fakeValuesService.fetchString("address.country_code"); }
 
     public String buildingNumber() {
         return fakeValuesService.numerify(fakeValuesService.fetchString("address.building_number"));

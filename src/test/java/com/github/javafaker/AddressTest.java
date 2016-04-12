@@ -70,4 +70,14 @@ public class AddressTest {
     public void testCity() {
         assertThat(faker.address().city(), matchesRegularExpression("[A-Za-z ]+"));
     }
+
+    @Test
+    public void testCountry() {
+        assertThat(faker.address().country(), matchesRegularExpression("[A-Za-z ]+"));
+    }
+
+    @Test
+    public void testCountryCode() {
+        assertThat(faker.address().countryCode(), matchesRegularExpression("[A-Za-z ]+"));
+    }
 }

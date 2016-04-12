@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -49,14 +50,18 @@ public class FakeValuesServiceTest {
     }
 
     @Test
-    public void compositeShouldComposeMultipleProperties() {
-        final String composedProperty = fakeValuesService.composite("property.composite", " ", new DummyService());
-        assertThat(composedProperty, is("John Smith"));
+    public void safeFetchShouldReturnValueInList() {
+        assertThat(fakeValuesService.safeFetch("property.dummy"), is("x"));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void compositeShouldThrowExceptionWhenMethodsDoNotExist() {
-        fakeValuesService.composite("property.composite", " ", new AnotherDummyService());
+    @Test
+    public void safeFetchShouldReturnSimpleList() {
+        assertThat(fakeValuesService.safeFetch("property.simple"), is("hello"));
+    }
+
+    @Test
+    public void safeFetchShouldReturnEmptyStringWhenPropertyDoesntExist() {
+        assertThat(fakeValuesService.safeFetch("property.dummy2"), isEmptyString());
     }
 
     private static class DummyService {

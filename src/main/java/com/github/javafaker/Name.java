@@ -1,12 +1,12 @@
 package com.github.javafaker;
 
-import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.FakeValuesServiceInterface;
 
 public class Name {
     private final Resolver resolver;
-    private final FakeValuesService fakeValuesService;
+    private final FakeValuesServiceInterface fakeValuesService;
 
-    public Name(Resolver resolver, FakeValuesService fakeValuesService) {
+    public Name(Resolver resolver, FakeValuesServiceInterface fakeValuesService) {
         this.resolver = resolver;
         this.fakeValuesService = fakeValuesService;
     }
