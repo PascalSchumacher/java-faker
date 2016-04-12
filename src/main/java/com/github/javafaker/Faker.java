@@ -47,7 +47,7 @@ public class Faker implements Resolver {
         this.randomService = new RandomService(random);
         this.fakeValuesService = new FakeValuesService(locale, randomService);
         this.lorem = new Lorem(fakeValuesService, randomService);
-        this.name = new Name(fakeValuesService);
+        this.name = new Name(this, fakeValuesService);
         this.internet = new Internet(name, fakeValuesService, randomService);
         this.phoneNumber = new PhoneNumber(fakeValuesService);
         this.address = new Address(this, name, fakeValuesService, randomService);
@@ -158,9 +158,7 @@ public class Faker implements Resolver {
         methodName = methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
         try {
             Object objectWithMethodToInvoke = MethodUtils.invokeMethod(this, object, null);
-            String value = (String) MethodUtils.invokeMethod(objectWithMethodToInvoke, methodName, null);
-            System.out.println("resolving " + key + " to " + value);
-            return value;
+            return (String) MethodUtils.invokeMethod(objectWithMethodToInvoke, methodName, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

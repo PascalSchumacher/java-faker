@@ -3,14 +3,16 @@ package com.github.javafaker;
 import com.github.javafaker.service.FakeValuesService;
 
 public class Name {
+    private final Resolver resolver;
     private final FakeValuesService fakeValuesService;
 
-    public Name(FakeValuesService fakeValuesService) {
+    public Name(Resolver resolver, FakeValuesService fakeValuesService) {
+        this.resolver = resolver;
         this.fakeValuesService = fakeValuesService;
     }
 
     public String name() {
-        return fakeValuesService.composite("name.formats", " ", this);
+        return fakeValuesService.resolve("name.name", this, resolver);
     }
 
     public String fullName() {
