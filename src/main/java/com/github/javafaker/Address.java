@@ -29,14 +29,13 @@ public class Address {
         return resolve("address.street_address");
     }
 
-    // TODO delete
-//    public String streetPrefix() {
-//        return resolve("address.street_prefix");
-//    }
-
-    // TODO deleted this method
-//    public String streetAddress(boolean includeSecondary) {
-
+    public String streetAddress(boolean includeSecondary) {
+        String streetAddress = resolve("address.street_address");
+        if (includeSecondary) {
+            streetAddress = streetAddress + " " + secondaryAddress();
+        }
+        return streetAddress;
+    }
 
     public String secondaryAddress() {
         return fakeValuesService.numerify(fakeValuesService.fetchString("address.secondary_address"));

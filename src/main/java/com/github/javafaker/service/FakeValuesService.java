@@ -59,7 +59,6 @@ public class FakeValuesService implements FakeValuesServiceInterface {
      * @param key
      * @return
      */
-    // TODO test
     public String fetchString(String key) {
         return (String) fetch(key);
     }
@@ -95,7 +94,6 @@ public class FakeValuesService implements FakeValuesServiceInterface {
      *            dot. E.g. name.first_name
      * @return
      */
-    // TODO test
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Object fetchObject(String key) {
         String[] path = key.split("\\.");
