@@ -90,12 +90,6 @@ public class FakerIT {
 
         for (Method method : methodsThatReturnStrings) {
             final Object returnValue = method.invoke(object);
-
-            // TODO why
-            if (method.getName().equals("citySuffix")) {
-                continue;
-            }
-
             logger.info(String.format("Invoked %s.%s = %s", object.getClass().getSimpleName().toLowerCase(), method.getName(), returnValue));
             assertThat(returnValue, is(notNullValue()));
             assertThat((String) returnValue, not(isEmptyString()));
