@@ -163,9 +163,20 @@ public class FakeValuesService implements FakeValuesServiceInterface {
         return randomService.nextInt(n);
     }
 
-
+    /**
+     * Resolves a key to a method on an object.
+     *
+     * #{hello} with result in a method call to current.hello();
+     *
+     * #{Person.hello_someone} will result in a method call to person.helloSomeone();
+     *
+     * @param key
+     * @param current
+     * @param resolver
+     * @return
+     */
     public String resolve(String key, Object current, Resolver resolver) {
-        String unresolvedString = fetchString(key);
+        String unresolvedString = safeFetch(key);
         String regex = "#\\{[A-Za-z_.]+\\}";
         Matcher matcher = Pattern.compile(regex).matcher(unresolvedString);
         while (matcher.find()) {
@@ -173,8 +184,8 @@ public class FakeValuesService implements FakeValuesServiceInterface {
             String strippedMatched = matched.replace('#', ' ').replace('{', ' ').replace('}', ' ').trim();
             boolean isFirstLetterCapital = Character.isUpperCase(strippedMatched.charAt(0));
             String objectWithMethodToResolve = isFirstLetterCapital ? strippedMatched : current.getClass().getSimpleName() + "." + strippedMatched;
-            String resolvedObjectMethod = resolver.resolve(objectWithMethodToResolve);
-            unresolvedString = unresolvedString.replace(matched, resolvedObjectMethod);
+            String resolvedValue = resolver.resolve(objectWithMethodToResolve);
+            unresolvedString = unresolvedString.replace(matched, resolvedValue);
         }
         return unresolvedString;
     }
