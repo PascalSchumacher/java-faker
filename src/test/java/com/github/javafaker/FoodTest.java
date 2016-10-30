@@ -9,16 +9,22 @@ public class FoodTest extends AbstractFakerTest {
 
     @Test
     public void ingredient() {
-        assertThat(faker.food().ingredient(), matchesRegularExpression("[A-Za-z ]+"));
+        for (int i=0;i < 100;i++) {
+            assertThat(faker.food().ingredient(), matchesRegularExpression("[A-Za-z ]+"));
+        }
     }
 
     @Test
     public void spice() {
-        assertThat(faker.food().spice(), matchesRegularExpression("[A-Za-z ]+"));
+        for (int i=0;i < 100;i++) {
+            assertThat(faker.food().spice(), matchesRegularExpression("[A-Za-z1-9- ]+"));
+        }
     }
 
     @Test
     public void measurement() {
-        assertThat(faker.food().measurement(), matchesRegularExpression("[A-Za-z1-9/ ]+{2}"));
+        for (int i=0;i < 100;i++) {
+            assertThat(faker.food().measurement(), matchesRegularExpression("[A-Za-z1-9/ ]+{2}"));
+        }
     }
 }
